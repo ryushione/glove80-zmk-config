@@ -18,6 +18,10 @@
 #define LOWER 1
 #define MAGIC 2
 #define FACTORY_TEST 3
+// AeroSpace integration — reserved for ZMK Studio editing.
+#define AERO 4
+#define AERO_MOD 5
+#define SHIFT_MOD 6
 
 / {
     behaviors {
@@ -87,6 +91,16 @@
         };
     };
 
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+        // Hold the AERO thumb + the SHIFT_MOD thumb together → AERO_MOD activates.
+        // Studio cannot edit conditional_layers at runtime, so this rule lives in source.
+        aero_move {
+            if-layers  = <AERO SHIFT_MOD>;
+            then-layer = <AERO_MOD>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -122,7 +136,7 @@
 
         magic_layer {
             bindings = <
-            &bt BT_CLR        &none               &none           &none           &none                                                                                                           &none      &none      &none      &none      &bt BT_CLR_ALL
+            &bt BT_CLR        &studio_unlock      &none           &none           &none                                                                                                           &none      &none      &none      &none      &bt BT_CLR_ALL
             &none             &none               &none           &none           &none           &none                                                                                &none      &none      &none      &none      &none      &none
             &none             &rgb_ug RGB_SPI     &rgb_ug RGB_SAI &rgb_ug RGB_HUI &rgb_ug RGB_BRI &rgb_ug RGB_TOG                                                                      &none      &none      &none      &none      &none      &none
             &bootloader       &rgb_ug RGB_SPD     &rgb_ug RGB_SAD &rgb_ug RGB_HUD &rgb_ug RGB_BRD &rgb_ug RGB_EFF                                                                      &none      &none      &none      &none      &none      &bootloader
@@ -139,6 +153,49 @@
             &kp N3   &kp N9   &kp N5   &kp N1   &kp N7   &kp N2                                                            &kp N2   &kp N7   &kp N1   &kp N5   &kp N9   &kp N3
             &kp N4   &kp N0   &kp N6   &kp N2   &kp N8   &kp N3   &kp N4   &kp N5   &kp N6      &kp N6   &kp N5   &kp N4   &kp N3   &kp N8   &kp N2   &kp N6   &kp N0   &kp N4
             &kp N5   &kp N1   &kp N7   &kp N3   &kp N9            &kp N7   &kp N8   &kp N9      &kp N9   &kp N8   &kp N7            &kp N9   &kp N3   &kp N7   &kp N1   &kp N5
+            >;
+        };
+
+        // AeroSpace integration — three reserved layers.
+        // All keys default to &trans so they pass through to lower layers until
+        // you fill them in via ZMK Studio. The conditional_layers rule above wires
+        // AERO + SHIFT_MOD → AERO_MOD automatically.
+
+        aero_layer {
+            // Hold the AERO thumb to access workspace switching + focus + commands.
+            bindings = <
+            &trans   &trans   &trans   &trans   &trans                                                                              &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans                                                            &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans                                                            &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans                                                            &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans      &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans            &trans   &trans   &trans      &trans   &trans   &trans            &trans   &trans   &trans   &trans   &trans
+            >;
+        };
+
+        aero_mod_layer {
+            // Activated automatically when AERO + SHIFT_MOD are both held.
+            // Same key positions as AERO, but emits "move window" variants.
+            bindings = <
+            &trans   &trans   &trans   &trans   &trans                                                                              &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans                                                            &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans                                                            &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans                                                            &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans      &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans            &trans   &trans   &trans      &trans   &trans   &trans            &trans   &trans   &trans   &trans   &trans
+            >;
+        };
+
+        shift_mod_layer {
+            // Marker layer — bound to a thumb via &mo SHIFT_MOD. Its only job is to
+            // satisfy the conditional rule. Stays empty.
+            bindings = <
+            &trans   &trans   &trans   &trans   &trans                                                                              &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans                                                            &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans                                                            &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans                                                            &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans      &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans
+            &trans   &trans   &trans   &trans   &trans            &trans   &trans   &trans      &trans   &trans   &trans            &trans   &trans   &trans   &trans   &trans
             >;
         };
     };
