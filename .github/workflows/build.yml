@@ -7,4 +7,7 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    # Pinned pre-Zephyr-4.1 (ZMK board variants landed 2025-12-09).  moergo's
+    # Glove80 board files haven't migrated to the new variant format yet, so
+    # @main fails with "KeyError: 'qualifiers'".  c25e927 is July 2025.
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@c25e927a2fae915e208a8777ce211a10c658e771
