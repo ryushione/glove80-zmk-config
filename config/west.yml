@@ -1,0 +1,15 @@
+manifest:
+  remotes:
+    # Use moergo's fork of ZMK — Glove80 board files, custom RGB underglow
+    # behaviors, and dt-bindings (outputs.h, ext_power.h, rgb.h) all live
+    # on this fork.  Upstream ZMK would build but Glove80-specific features
+    # wouldn't compile.
+    - name: moergo-sc
+      url-base: https://github.com/moergo-sc
+  projects:
+    - name: zmk
+      remote: moergo-sc
+      revision: main
+      import: app/west.yml
+  self:
+    path: config

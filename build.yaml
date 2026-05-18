@@ -1,0 +1,12 @@
+# Drives the GitHub Actions matrix.  ZMK's reusable workflow reads this
+# file and produces one UF2 per `include:` entry.
+#
+# studio-rpc-usb-uart snippet + CONFIG_ZMK_STUDIO=y are applied to the
+# left (central) half only.  The right (peripheral) half receives keymap
+# updates over the existing BLE inter-half link.
+---
+include:
+  - board: glove80_lh
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
+  - board: glove80_rh
